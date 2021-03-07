@@ -1702,7 +1702,216 @@ Initial plugin and account set up, then:
 
 ## Install Sonarqube
 
+Download and unpack Sonarqube:
 
+    devops@MacBook-Pro:~/devops/repos/ucsc-devops-02|main ⇒  cd sonar
+    devops@MacBook-Pro:~/devops/repos/ucsc-devops-02/sonar|main ⇒  vagrant ssh
+    Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-136-generic x86_64)
+
+    * Documentation:  https://help.ubuntu.com
+    * Management:     https://landscape.canonical.com
+    * Support:        https://ubuntu.com/advantage
+
+    System information as of Sun Mar  7 18:15:56 UTC 2021
+
+    System load:  0.0               Processes:             96
+    Usage of /:   3.2% of 38.71GB   Users logged in:       0
+    Memory usage: 16%               IP address for enp0s3: 10.0.2.15
+    Swap usage:   0%
+
+
+    0 packages can be updated.
+    0 of these updates are security updates.
+
+    New release '20.04.2 LTS' available.
+    Run 'do-release-upgrade' to upgrade to it.
+
+    vagrant@ubuntu-bionic:~$ wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.7.0.41497.zip
+    --2021-03-07 18:16:39--  https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.7.0.41497.zip
+    Resolving binaries.sonarsource.com (binaries.sonarsource.com)... 91.134.125.245
+    Connecting to binaries.sonarsource.com (binaries.sonarsource.com)|91.134.125.245|:443... connected.
+    HTTP request sent, awaiting response... 200 OK
+    Length: 255910597 (244M) [application/zip]
+    Saving to: ‘sonarqube-8.7.0.41497.zip’
+
+    sonarqube-8.7.0.41497.zip          100%[===============================================================>] 244.05M  1.45MB/s    in 3m 5s
+
+    2021-03-07 18:19:46 (1.32 MB/s) - ‘sonarqube-8.7.0.41497.zip’ saved [255910597/255910597]
+    
+    vagrant@ubuntu-bionic:~$ sudo apt install unzip
+    Reading package lists... Done
+    Building dependency tree
+    Reading state information... Done
+    Suggested packages:
+    zip
+    The following NEW packages will be installed:
+    unzip
+    0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+    Need to get 168 kB of archives.
+    After this operation, 567 kB of additional disk space will be used.
+    Get:1 http://archive.ubuntu.com/ubuntu bionic-updates/main amd64 unzip amd64 6.0-21ubuntu1.1 [168 kB]
+    Fetched 168 kB in 1s (141 kB/s)
+    Selecting previously unselected package unzip.
+    (Reading database ... 65353 files and directories currently installed.)
+    Preparing to unpack .../unzip_6.0-21ubuntu1.1_amd64.deb ...
+    Unpacking unzip (6.0-21ubuntu1.1) ...
+    Setting up unzip (6.0-21ubuntu1.1) ...
+    Processing triggers for mime-support (3.60ubuntu1) ...
+    Processing triggers for man-db (2.8.3-2ubuntu0.1) ...
+
+Install Java:
+
+    vagrant@ubuntu-bionic:~$ sudo apt install openjdk-11-jre-headless
+    [snip - console output lost]
+    Adding debian:Staat_der_Nederlanden_EV_Root_CA.pem
+    Adding debian:SwissSign_Gold_CA_-_G2.pem
+    Adding debian:TWCA_Root_Certification_Authority.pem
+    Adding debian:SecureTrust_CA.pem
+    Adding debian:Amazon_Root_CA_3.pem
+    Adding debian:E-Tugra_Certification_Authority.pem
+    Adding debian:QuoVadis_Root_CA_2.pem
+    Adding debian:Buypass_Class_2_Root_CA.pem
+    Adding debian:GTS_Root_R3.pem
+    Adding debian:GlobalSign_Root_CA_-_R2.pem
+    Adding debian:USERTrust_ECC_Certification_Authority.pem
+    Adding debian:GeoTrust_Primary_Certification_Authority_-_G2.pem
+    Adding debian:SZAFIR_ROOT_CA2.pem
+    Adding debian:Microsoft_ECC_Root_Certificate_Authority_2017.pem
+    Adding debian:Atos_TrustedRoot_2011.pem
+    Adding debian:UCA_Global_G2_Root.pem
+    Adding debian:QuoVadis_Root_CA_1_G3.pem
+    Adding debian:QuoVadis_Root_CA_3.pem
+    Adding debian:Global_Chambersign_Root_-_2008.pem
+    Adding debian:Certum_Trusted_Network_CA_2.pem
+    Adding debian:ACCVRAIZ1.pem
+    Adding debian:DigiCert_Trusted_Root_G4.pem
+    Adding debian:IdenTrust_Public_Sector_Root_CA_1.pem
+    Adding debian:TrustCor_RootCert_CA-2.pem
+    Adding debian:QuoVadis_Root_CA_3_G3.pem
+    Adding debian:SSL.com_EV_Root_Certification_Authority_RSA_R2.pem
+    Adding debian:Entrust_Root_Certification_Authority_-_EC1.pem
+    Adding debian:CA_Disig_Root_R2.pem
+    Adding debian:AffirmTrust_Commercial.pem
+    Adding debian:Security_Communication_Root_CA.pem
+    Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2011.pem
+    done.
+    Processing triggers for ureadahead (0.100.0-21) ...
+    Processing triggers for libc-bin (2.27-3ubuntu1.4) ...
+    Processing triggers for systemd (237-3ubuntu10.44) ...
+    Processing triggers for man-db (2.8.3-2ubuntu0.1) ...
+    Processing triggers for ca-certificates (20210119~18.04.1) ...
+    Updating certificates in /etc/ssl/certs...
+    0 added, 0 removed; done.
+    Running hooks in /etc/ca-certificates/update.d...
+
+    done.
+    done.
+
+Added this line to Vagrantfile:
+
+    config.vm.network :forwarded_port, guest: 9000, host: 4568
+
+Then:
+
+    devops@MacBook-Pro:~/devops/repos/ucsc-devops-02/sonar|main⚡ ⇒  vagrant reload
+    ==> default: Attempting graceful shutdown of VM...
+    ==> default: Checking if box 'ubuntu/bionic64' version '20210305.0.0' is up to date...
+    ==> default: Clearing any previously set forwarded ports...
+    ==> default: Fixed port collision for 22 => 2222. Now on port 2200.
+    ==> default: Clearing any previously set network interfaces...
+    ==> default: Preparing network interfaces based on configuration...
+        default: Adapter 1: nat
+    ==> default: Forwarding ports...
+        default: 9000 (guest) => 4568 (host) (adapter 1)
+        default: 22 (guest) => 2200 (host) (adapter 1)
+    ==> default: Running 'pre-boot' VM customizations...
+    ==> default: Booting VM...
+    ==> default: Waiting for machine to boot. This may take a few minutes...
+        default: SSH address: 127.0.0.1:2200
+        default: SSH username: vagrant
+        default: SSH auth method: private key
+    ==> default: Machine booted and ready!
+    [default] GuestAdditions 6.1.16 running --- OK.
+    ==> default: Checking for guest additions in VM...
+    ==> default: Mounting shared folders...
+        default: /vagrant => /Users/devops/devops/repos/ucsc-devops-02/sonar
+    ==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+    ==> default: flag to force provisioning. Provisioners marked to run always will still run.
+
+    vagrant@ubuntu-bionic:~$ cd sonarqube-8.7.0.41497/
+    vagrant@ubuntu-bionic:~/sonarqube-8.7.0.41497$ ./bin/linux-x86-64/sonar.sh
+    Usage: ./bin/linux-x86-64/sonar.sh { console | start | stop | force-stop | restart | status | dump }
+    vagrant@ubuntu-bionic:~/sonarqube-8.7.0.41497$ ./bin/linux-x86-64/sonar.sh start
+    Starting SonarQube...
+    Started SonarQube.
+
+Sonarqube kept stopping. Determined from the error logs that it needed more RAM. Edited the Vagrantfile to:
+
+    config.vm.provider "virtualbox" do |v|
+        v.name = "sonar_vm"
+        v.memory = "4096"
+    end
+
+Then:
+
+    devops@MacBook-Pro:~/devops/repos/ucsc-devops-02/sonar|main⚡ ⇒  vagrant reload
+    ==> default: Attempting graceful shutdown of VM...
+    ==> default: Checking if box 'ubuntu/bionic64' version '20210305.0.0' is up to date...
+    ==> default: Clearing any previously set forwarded ports...
+    ==> default: Fixed port collision for 22 => 2222. Now on port 2200.
+    ==> default: Clearing any previously set network interfaces...
+    ==> default: Preparing network interfaces based on configuration...
+        default: Adapter 1: nat
+    ==> default: Forwarding ports...
+        default: 9000 (guest) => 4568 (host) (adapter 1)
+        default: 22 (guest) => 2200 (host) (adapter 1)
+    ==> default: Running 'pre-boot' VM customizations...
+    ==> default: Booting VM...
+    ==> default: Waiting for machine to boot. This may take a few minutes...
+        default: SSH address: 127.0.0.1:2200
+        default: SSH username: vagrant
+        default: SSH auth method: private key
+    ==> default: Machine booted and ready!
+    [default] GuestAdditions 6.1.16 running --- OK.
+    ==> default: Checking for guest additions in VM...
+    ==> default: Mounting shared folders...
+        default: /vagrant => /Users/devops/devops/repos/ucsc-devops-02/sonar
+    ==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+    ==> default: flag to force provisioning. Provisioners marked to run always will still run.
+
+    devops@MacBook-Pro:~/devops/repos/ucsc-devops-02/sonar|main⚡ ⇒  vagrant ssh
+    Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-136-generic x86_64)
+
+    * Documentation:  https://help.ubuntu.com
+    * Management:     https://landscape.canonical.com
+    * Support:        https://ubuntu.com/advantage
+
+    System information as of Sun Mar  7 18:40:23 UTC 2021
+
+    System load:  0.22              Processes:             100
+    Usage of /:   5.5% of 38.71GB   Users logged in:       0
+    Memory usage: 3%                IP address for enp0s3: 10.0.2.15
+    Swap usage:   0%
+
+
+    0 packages can be updated.
+    0 of these updates are security updates.
+
+    New release '20.04.2 LTS' available.
+    Run 'do-release-upgrade' to upgrade to it.
+
+
+    Last login: Sun Mar  7 18:30:26 2021 from 10.0.2.2
+    vagrant@ubuntu-bionic:~$ cd sonarqube-8.7.0.41497/
+    vagrant@ubuntu-bionic:~/sonarqube-8.7.0.41497$ ./bin/linux-x86-64/sonar.sh start
+    Starting SonarQube...
+    Started SonarQube.
+    vagrant@ubuntu-bionic:~/sonarqube-8.7.0.41497$ ./bin/linux-x86-64/sonar.sh status
+    SonarQube is running (1888).
+
+Changed initial password then:
+
+![](sonar-installed.png)
 
 ## Install Artifactory
 
