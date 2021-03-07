@@ -521,6 +521,7 @@ then:
     Selecting previously unselected package libc-dev-bin.
     Preparing to unpack .../04-libc-dev-bin_2.27-3ubuntu1.4_amd64.deb ...
     Unpacking libc-dev-bin (2.27-3ubuntu1.4) ...
+    
     devops@MacBook-Pro:~/devops/repos/ucsc-devops-02/sonar|main⚡ ⇒  vagrant up
     Bringing machine 'default' up with 'virtualbox' provider...
     ==> default: Importing base box 'ubuntu/bionic64'...
@@ -2221,7 +2222,7 @@ Install Java:
 
 Map port for local machine to 4569 in Vagrantfile:
 
-  config.vm.network :forwarded_port, guest: 9000, host: 4568
+    config.vm.network :forwarded_port, guest: 9000, host: 4569
 
 Then:
 
